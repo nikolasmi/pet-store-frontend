@@ -133,6 +133,8 @@ body {
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 h1 {
@@ -152,11 +154,12 @@ h1 {
 }
 
 .item-image img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-left: 10px;
 }
 
 .item-details {
@@ -169,16 +172,17 @@ h1 {
   margin: 0;
   color: #333;
   font-weight: 500;
+  margin-left: 10px;
 }
 
 .item-details .price {
   color: #e74c3c;
   font-weight: 700;
-  margin: 5px 0;
+  margin: 5px 10px;
 }
 
 .item-details p {
-  margin: 5px 0;
+  margin: 5px 10px;
 }
 
 .quantity-input {
@@ -186,6 +190,7 @@ h1 {
   padding: 5px;
   border: 1px solid #ddd;
   text-align: center;
+  margin-right: 10px;
 }
 
 .remove-btn {
@@ -196,6 +201,7 @@ h1 {
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.3s ease;
+  margin-right: 10px;
 }
 
 .remove-btn:hover {

@@ -327,6 +327,7 @@ main {
   font-size: 14px;
   margin-bottom: 10px; 
   transition: background-color 0.3s ease;
+  margin-right: 10px;
 }
 
 .product button.view-button:hover {
