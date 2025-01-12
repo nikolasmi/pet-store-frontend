@@ -1,29 +1,21 @@
 <template>
   <div class="container">
     <h1 class="title">Moje Porudžbine</h1>
-
-    <!-- Loading, error, and empty states -->
     <div v-if="loading" class="loading">Učitavanje porudžbina...</div>
     <div v-if="error" class="error">{{ error }}</div>
     <div v-if="orders.length === 0 && !loading" class="empty">
       Nema porudžbina za prikazivanje.
     </div>
-
-    <!-- Iterate through orders -->
     <div v-for="order in orders" :key="order.orderId" class="order">
       <h2 class="order-title">Porudžbina #{{ order.orderId }}</h2>
       <p class="order-status">Status: <span>{{ order.status }}</span></p>
       <p class="order-price">Ukupna cena: <span>{{ order.totalPrice }} USD</span></p>
       <p class="order-date">Datum: <span>{{ new Date(order.createdAt).toLocaleDateString() }}</span></p>
-
-      <!-- Display items in order -->
       <div v-for="item in order.cart.cartPets" :key="item.cartPetId" class="order-item">
         <p>{{ item.pet.name }} - <span>{{ item.pet.price }} USD</span></p>
         <p>{{ item.pet.description }}</p>
         <p>Vrsta: {{ item.pet.type }}, Starost: {{ item.pet.age }} godina</p>
         <p>Veličina: {{ item.pet.size }}, Origin: {{ item.pet.origin }}</p>
-
-        <!-- Review Form -->
         <div v-if="order.status === 'pristiglo' && !reviewedPets[item.petId]" class="review-form">
           <textarea v-model="reviews[item.petId].comment" placeholder="Unesite komentar..."></textarea>
           <input
@@ -42,8 +34,6 @@
           <p>Recenzija za ovog ljubimca je već poslata. Hvala!</p>
         </div>
       </div>
-
-      <!-- Cancel order button -->
       <button 
         v-if="order.status !== 'otkazano' && order.status !== 'pristiglo'" 
         @click="confirmCancelOrder(order.orderId)" 
@@ -59,7 +49,6 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import {jwtDecode} from "jwt-decode";
 
-// Extract user ID from JWT token
 const getIdFromToken = () => {
   const token = localStorage.getItem("token");
   if (token) {
@@ -74,9 +63,8 @@ const orders = ref([]);
 const loading = ref(false);
 const error = ref(null);
 const reviews = ref({});
-const reviewedPets = ref({}); // Store pets that have been reviewed
+const reviewedPets = ref({}); 
 
-// Load orders for the current user
 const loadOrders = async () => {
   if (!id.value) {
     error.value = "Korisnik nije prijavljen.";
@@ -97,13 +85,12 @@ const loadOrders = async () => {
     } else {
       orders.value = response.data;
 
-      // Initialize reviews and reviewedPets
       orders.value.forEach(order => {
         order.cart.cartPets.forEach(item => {
           if (!reviews.value[item.petId]) {
-            reviews.value[item.petId] = { comment: "", rating: 1 }; // Default values
+            reviews.value[item.petId] = { comment: "", rating: 1 }; 
           }
-          reviewedPets.value[item.petId] = false; // Mark all pets as not reviewed
+          reviewedPets.value[item.petId] = false;
         });
       });
     }
@@ -114,7 +101,6 @@ const loadOrders = async () => {
   }
 };
 
-// Submit a review for a specific pet
 const submitReview = async (orderId, petId) => {
   const token = localStorage.getItem("token");
 
@@ -124,7 +110,6 @@ const submitReview = async (orderId, petId) => {
     comment: reviews.value[petId]?.comment,
   };
 
-  // Validate inputs
   if (!reviewData.comment || reviewData.comment.trim() === "") {
     error.value = "Komentar ne sme biti prazan.";
     return;
@@ -150,7 +135,6 @@ const submitReview = async (orderId, petId) => {
     if (response.data.error) {
       error.value = response.data.message;
     } else {
-      // Mark the pet as reviewed and reset review input
       reviews.value[petId] = { comment: "", rating: 1 };
       reviewedPets.value[petId] = true;
     }
@@ -159,7 +143,6 @@ const submitReview = async (orderId, petId) => {
   }
 };
 
-// Cancel an order
 const cancelOrder = async (orderId) => {
   const token = localStorage.getItem("token");
   try {
@@ -186,7 +169,6 @@ const cancelOrder = async (orderId) => {
   }
 };
 
-// Confirm order cancellation
 const confirmCancelOrder = (orderId) => {
   if (confirm("Da li ste sigurni da želite da otkažete ovu porudžbinu?")) {
     cancelOrder(orderId);
@@ -200,7 +182,6 @@ onMounted(() => {
 
 
 <style scoped>
-  /* Basic styling for the order page */
   .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -216,7 +197,6 @@ onMounted(() => {
     text-align: center;
   }
   
-  /* Loading, error, and empty state styling */
   .loading {
     text-align: center;
     font-size: 1.2rem;
@@ -235,7 +215,6 @@ onMounted(() => {
     color: #6c757d;
   }
   
-  /* Order styling */
   .order {
     background-color: #f8f9fa;
     border: 1px solid #ddd;
@@ -260,7 +239,6 @@ onMounted(() => {
     color: #007bff;
   }
   
-  /* Review Form */
   .review-form {
     margin-top: 20px;
   }
@@ -288,7 +266,6 @@ onMounted(() => {
     background-color: #218838;
   }
   
-  /* Cancel button */
   .cancel-button {
     background-color: red;
     color: white;
@@ -301,7 +278,6 @@ onMounted(() => {
     background-color: darkred;
   }
   
-  /* Responsive */
   @media (max-width: 768px) {
     .container {
       padding: 10px;

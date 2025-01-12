@@ -37,96 +37,88 @@
 </template>
   
 <script setup>
-    import { ref, onMounted } from 'vue';
-    import axios from 'axios';
-  
-    const cart = ref(null);
-    const totalPrice = ref(0);
-  
-    const token = localStorage.getItem('token');
-  
-    const fetchCart = async () => {
-        try {
-            const response = await axios.get('http://localhost:3000/api/cart', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            cart.value = response.data;
-            
-            // Postavi količinu na 1 ako nije postavljena
-            cart.value.cartPets.forEach(item => {
-                if (item.quantity === undefined || item.quantity === 0) {
-                    item.quantity = 1;
-                }
-            });
+  import { ref, onMounted } from 'vue';
+  import axios from 'axios';
 
-            // Ažuriraj ukupnu cenu
-            calculateTotalPrice();
-        } catch (error) {
-            console.error('Greška pri učitavanju korpe:', error);
-        }
-    };
-  
-    const updateQuantity = async (cartPetId, newQuantity) => {
-        try {
-            // Ažuriraj količinu na serveru
-            await axios.patch('http://localhost:3000/api/cart', {
-                cartPetId,
-                quantity: newQuantity,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`, 
-                },
-            });
-            
-            // Ažuriraj ukupnu cenu
-            calculateTotalPrice();
-        } catch (error) {
-            console.error('Greška pri ažuriranju količine:', error);
-        }
-    };
-  
-    const removeFromCart = async (cartPetId) => {
+  const cart = ref(null);
+  const totalPrice = ref(0);
+
+  const token = localStorage.getItem('token');
+
+  const fetchCart = async () => {
       try {
-        await axios.delete(`http://localhost:3000/api/cart/${cartPetId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        fetchCart();
+          const response = await axios.get('http://localhost:3000/api/cart', {
+              headers: {
+                  Authorization: `Bearer ${token}`
+              }
+          });
+          cart.value = response.data;
+          cart.value.cartPets.forEach(item => {
+              if (item.quantity === undefined || item.quantity === 0) {
+                  item.quantity = 1;
+              }
+          });
+          calculateTotalPrice();
       } catch (error) {
-        console.error('Greška pri brisanju proizvoda:', error);
+          console.error('Greška pri učitavanju korpe:', error);
       }
-    };
-  
-    const calculateTotalPrice = () => {
-        if (cart.value) {
-            totalPrice.value = cart.value.cartPets.reduce(
-            (acc, item) => acc + item.pet.price * item.quantity, 0);
-        } 
-    };
-    
-    const checkout = async () => {
-        try {
-            // Pošaljite totalPrice zajedno sa ostalim podacima kada kreirate porudžbinu
-            await axios.post('http://localhost:3000/api/cart/makeOrder', 
-            { totalPrice: totalPrice.value },  // Dodajte totalPrice ovde
-            {
-                headers: {
-                Authorization: `Bearer ${token}`
-                }
-            }
-            );
-            alert('Porudžbina je uspešno kreirana!');
-        } catch (error) {
-            console.error('Greška pri kreiranju porudžbine:', error);
+  };
+
+  const updateQuantity = async (cartPetId, newQuantity) => {
+      try {
+          await axios.patch('http://localhost:3000/api/cart', {
+              cartPetId,
+              quantity: newQuantity,
+          }, {
+              headers: {
+                  Authorization: `Bearer ${token}`, 
+              },
+          });
+          calculateTotalPrice();
+      } catch (error) {
+          console.error('Greška pri ažuriranju količine:', error);
+      }
+  };
+
+  const removeFromCart = async (cartPetId) => {
+    try {
+      await axios.delete(`http://localhost:3000/api/cart/${cartPetId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-    };
-  
-    onMounted(() => {
+      });
       fetchCart();
-    });
+    } catch (error) {
+      console.error('Greška pri brisanju proizvoda:', error);
+    }
+  };
+
+  const calculateTotalPrice = () => {
+      if (cart.value) {
+          totalPrice.value = cart.value.cartPets.reduce(
+          (acc, item) => acc + item.pet.price * item.quantity, 0);
+      } 
+  };
+  
+  const checkout = async () => {
+      try {
+          await axios.post('http://localhost:3000/api/cart/makeOrder', 
+          { totalPrice: totalPrice.value },
+          {
+              headers: {
+              Authorization: `Bearer ${token}`
+              }
+          }
+          );
+          alert('Porudžbina je uspešno kreirana!');
+      } catch (error) {
+          console.error('Greška pri kreiranju porudžbine:', error);
+      }
+  };
+
+  onMounted(() => {
+    fetchCart();
+  });
 </script>
   
 <style scoped>

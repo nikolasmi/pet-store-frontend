@@ -119,21 +119,20 @@ async function fetchPets() {
 
 async function addToCart(petId: number) {
     try {
-        const token = localStorage.getItem('token'); // Preuzimanje tokena sa localStorage
+        const token = localStorage.getItem('token'); 
         if (!token) {
             toast.error('Nema važećeg tokena');
             return;
         }
 
-        const quantity = 1; // Postavljamo default vrednost quantity na 1
+        const quantity = 1;
 
-        // Poslati zahtev sa Authorization header-om
         await axios.post(
             'http://localhost:3000/api/cart/addToCart',
-            { petId, quantity }, // Dodajte quantity u telo zahteva
+            { petId, quantity }, 
             {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Dodajte token u header
+                    Authorization: `Bearer ${token}`,
                 },
             }
         );
@@ -188,7 +187,6 @@ fetchPets();
 </script>
 
 <style scoped>
-  /* @import "../assets/home.css"; */
   .container {
   display: flex;
   flex-direction: column;
@@ -224,7 +222,7 @@ fetchPets();
 }
 
 aside {
-  flex: 1;
+  flex: 0.8;
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -292,7 +290,7 @@ button[type="submit"]:hover {
 }
 
 main {
-  flex: 3;
+  flex: 3.2;
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(4, 1fr); 
@@ -364,7 +362,6 @@ button:disabled {
   background-color: #218838;
 }
 
-/* Media Queries */
 @media (max-width: 1024px) {
   main {
     grid-template-columns: repeat(3, 1fr); 

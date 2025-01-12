@@ -10,23 +10,18 @@ const initialMessage = "Dobrodošli! Kako možemo da vam pomognemo?";
 
 <template>
   <Header />
-
   <div class="main-wrapper">
     <div class="inner-wrapper">
       <RouterView />
-
-      
       <button 
         v-show="!isChatOpen" 
         @click="isChatOpen = true" 
         class="chatbot-button">
         Chat
       </button>
-
       <Chatbot v-show="isChatOpen" :initialMessage="initialMessage" @close="isChatOpen = false" />
     </div>
   </div>
-
   <Footer />
 </template>
 
@@ -41,10 +36,9 @@ const initialMessage = "Dobrodošli! Kako možemo da vam pomognemo?";
   position: relative;
 }
 
-/* Plivajući dugme koje pokreće chat */
 .chatbot-button {
   position: fixed;
-  bottom: 20px;
+  bottom: 20px; 
   right: 20px;
   background-color: #39c0ed;
   color: white;
@@ -54,11 +48,12 @@ const initialMessage = "Dobrodošli! Kako možemo da vam pomognemo?";
   font-size: 20px;
   cursor: pointer;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10000; /* Osigurava da dugme bude ispred svega */
 }
 
 .chatbot-window {
   position: fixed;
-  bottom: 80px; /* Visina od dna ekrana */
+  bottom: 80px; 
   right: 20px;
   width: 300px;
   height: 400px;

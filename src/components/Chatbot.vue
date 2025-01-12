@@ -9,7 +9,6 @@ const props = defineProps({
   }
 });
 
-// State for controlling the chat visibility
 const isChatOpen = ref(true);
 const newMessage = ref('');
 const messages = ref([
@@ -21,10 +20,8 @@ const messages = ref([
   }
 ]);
 
-// Function to send a new message
 const sendMessage = async () => {
   if (newMessage.value.trim()) {
-    // Dodaj korisničku poruku u chat
     messages.value.push({
       from: 'user',
       avatar: 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp',
@@ -32,20 +29,14 @@ const sendMessage = async () => {
       image: null
     });
 
-    // Očisti poruku od eventualnih novih redova
-    const cleanedMessage = newMessage.value.replace(/\n/g, ' ').trim(); // ukloni nove redove
+    const cleanedMessage = newMessage.value.replace(/\n/g, ' ').trim(); 
 
     try {
-      // Pošaljite poruku Rasa serveru
       const response = await axios.post('http://localhost:5005/webhooks/rest/webhook', {
         sender: 'user',
         message: cleanedMessage
       });
 
-      // Proveri odgovor od Rasa servera
-      console.log(response.data);  // Proveri šta tačno server odgovara
-
-      // Dodaj Rasa odgovor u chat
       response.data.forEach((message: any) => {
         messages.value.push({
           from: 'admin',
@@ -58,20 +49,16 @@ const sendMessage = async () => {
       console.error('Error sending message to Rasa:', error);
     }
 
-    // Očisti unos nakon slanja
     newMessage.value = '';
 
-    // Spremi ažuriranu listu poruka u localStorage
     localStorage.setItem('chatMessages', JSON.stringify(messages.value));
   }
 };
 
-// Function to toggle chat visibility
 const toggleChat = () => {
   isChatOpen.value = !isChatOpen.value;
 };
 
-// Učitavanje poruka iz localStorage prilikom inicijalizacije
 onMounted(() => {
   const savedMessages = localStorage.getItem('chatMessages');
   if (savedMessages) {
@@ -83,8 +70,6 @@ onMounted(() => {
 <template>
   <section style="background-color: #eee;">
     <div class="container py-5">
-
-      <!-- Chat Container, will toggle between full view and minimized -->
       <div v-if="isChatOpen" class="row d-flex justify-content-center">
         <div class="col-md-8 col-lg-6 col-xl-4">
           <div class="card" id="chat1" style="border-radius: 15px;">
@@ -103,31 +88,23 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-
-              <!-- Message input -->
               <div class="form-outline">
                 <textarea v-model="newMessage" class="form-control" rows="4"></textarea>
                 <label class="form-label">Type your message</label>
               </div>
-
-              <!-- Send button -->
               <button @click="sendMessage" class="btn btn-primary mt-2">Send</button>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Minimized Chatbox -->
       <div v-else class="chat-minimized" @click="toggleChat">
         <i class="fas fa-comment"></i>
       </div>
-
     </div>
   </section>
 </template>
 
 <style scoped>
-/* Basic styles to replace Bootstrap */
 .container {
   width: 100%;
   max-width: 1200px;
@@ -140,8 +117,27 @@ onMounted(() => {
 }
 
 .card {
+  background-color: #d3cccc;
   border-radius: 15px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  position: fixed; 
+  bottom: 20px; 
+  right: 20px; 
+  width: 350px; 
+  height: auto; 
+  z-index: 9999; 
+  animation: fadeIn 0.3s ease-out; 
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .card-header {
@@ -158,6 +154,9 @@ onMounted(() => {
 
 .card-body {
   padding: 20px;
+  max-height: 400px;
+  overflow-y: auto; 
+  overflow-x: hidden;
 }
 
 .message-user,
@@ -238,7 +237,6 @@ onMounted(() => {
   background-color: #317c9b;
 }
 
-/* Styles for minimized chatbox */
 .chat-minimized {
   position: fixed;
   bottom: 20px;

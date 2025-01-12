@@ -11,12 +11,9 @@
           <p><strong>Cena:</strong> {{ pet.price }}$</p>
           <p><strong>Status:</strong> {{ pet.availabe }}</p>
           <p><strong>Opis:</strong> {{ pet.description }}</p>
-          <!-- Dugme za dodavanje u korpu -->
           <button @click="addToCart(pet.petId)" class="add-to-cart-btn">Dodaj u korpu</button>
         </div>
       </div>
-  
-      <!-- Sekcija za komentare -->
       <div class="reviews-section">
         <h2>Komentari i ocene</h2>
         <div v-if="reviews.length > 0">
@@ -42,26 +39,24 @@
   import type { Pet } from '@/types/Pet';
   import type { Review } from '@/types/Review'
   
-  const pet = ref<Pet | null>(null); // Tipiziraj pet kao Pet ili null
-  const reviews = ref<Review[]>([]); // Tipiziraj reviews kao array Review objekata
+  const pet = ref<Pet | null>(null); 
+  const reviews = ref<Review[]>([]); 
   
   const route = useRoute();
   
-  // Funkcija za dohvat podataka o ljubimcu
   async function fetchPetDetails() {
-    const petId = route.params.id; // Preuzima ID ljubimca iz URL-a
+    const petId = route.params.id; 
     try {
       const response = await axios.get(`http://localhost:3000/api/pet/${petId}`);
       pet.value = response.data;
-      await fetchReviews(Number(petId)); // Fetch komentare kada se ljubimac učita
+      await fetchReviews(Number(petId)); 
     } catch (error) {
       console.error('Greška prilikom učitavanja podataka o ljubimcu:', error);
     }
   }
   
-  // Funkcija za dohvat komentara za određenog ljubimca
   async function fetchReviews(petId: number) {
-    const token = localStorage.getItem('token'); // Preuzimanje tokena iz localStorage
+    const token = localStorage.getItem('token'); 
     if (!token) {
         console.log('Nema važećeg tokena');
         return;
@@ -70,16 +65,15 @@
     try {
         const response = await axios.get(`http://localhost:3000/api/review/all`, {
         headers: {
-            Authorization: `Bearer ${token}`, // Dodavanje tokena u Authorization header
+            Authorization: `Bearer ${token}`, 
         },
         });
-        reviews.value = response.data.filter((review: Review) => review.petId === petId); // Filtriramo komentare za trenutno prikazanog ljubimca
+        reviews.value = response.data.filter((review: Review) => review.petId === petId);
     } catch (error) {
         console.error('Greška prilikom učitavanja komentara:', error);
     }
   }
   
-  // Funkcija za dodavanje proizvoda u korpu
   async function addToCart(petId: number) {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -98,7 +92,6 @@
           },
         }
       );
-      console.log('Proizvod dodat u korpu');
     } catch (error) {
       console.error('Greška prilikom dodavanja proizvoda u korpu:', error);
     }
@@ -111,7 +104,7 @@
 <style scoped>
     .pet-view {
     display: flex;
-    flex-direction: column; /* Promena na vertikalni raspored */
+    flex-direction: column;
     align-items: center;
     padding: 20px;
     }
@@ -172,8 +165,8 @@
 
   .reviews-section {
     margin-top: 30px;
-    width: 100%; /* Širina sekcije za komentare */
-    max-width: 800px; /* Ograničena širina sekcije za komentare */
+    width: 100%;
+    max-width: 800px; 
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;

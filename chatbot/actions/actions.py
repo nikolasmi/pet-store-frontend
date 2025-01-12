@@ -62,31 +62,4 @@ class ActionFetchPet(Action):
         dispatcher.utter_message(text=f"{response_text} You can see the details here: {url}")
         
         return []
-# from rasa_sdk import Action
-# from rasa_sdk.events import SlotSet
 
-# class ActionProvidePetLink(Action):
-
-#     def name(self) -> str:
-#         return "action_provide_pet_link"
-
-#     def run(self, dispatcher, tracker, domain):
-#         pet_type = tracker.latest_message['text'].lower()
-
-#         # Mappings for pet types to their respective API links
-#         pet_links = {
-#             'dog': 'http://localhost:5173/api/pet?type=pas&size=&availabe=',
-#             'cat': 'http://localhost:3000/api/pet?type=macka&size=&availabe=',
-#             'fish': 'http://localhost:3000/api/pet?type=ribica&size=&availabe=',
-#             'hamster': 'http://localhost:3000/api/pet?type=hrcak&size=&availabe=',
-#             'bird': 'http://localhost:3000/api/pet?type=papagaj&size=&availabe=',
-#         }
-
-#         # Check if the pet type is in the message and respond with the corresponding link
-#         for pet, link in pet_links.items():
-#             if pet in pet_type:
-#                 dispatcher.utter_message(text=f"Here is the link to find {pet}s: {link}")
-#                 return [SlotSet("requested_pet", pet)]
-
-#         dispatcher.utter_message(text="Sorry, I couldn't find that pet type.")
-#         return []

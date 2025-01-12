@@ -39,7 +39,6 @@
   import "vue3-toastify/dist/index.css";
 
   
-  // Podaci za korisnika
   const data = reactive({
     userId: null,
     email: "",
