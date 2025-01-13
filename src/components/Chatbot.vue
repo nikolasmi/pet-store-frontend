@@ -5,7 +5,7 @@ import axios from 'axios';
 const props = defineProps({
   initialMessage: {
     type: String,
-    default: "Dobrodošli! Kako možemo da vam pomognemo?"
+    default: "Welcome! How can I help you?"
   }
 });
 
@@ -15,7 +15,7 @@ const messages = ref([
   {
     from: 'admin',
     avatar: 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp',
-    text: props.initialMessage || "Dobrodošli! Kako možemo da vam pomognemo?",
+    text: props.initialMessage || "Welcome! How can I help you?",
     image: null
   }
 ]);
@@ -98,7 +98,7 @@ onMounted(() => {
         </div>
       </div>
       <div v-else class="chat-minimized" @click="toggleChat">
-        <i class="fas fa-comment"></i>
+        <i class="fas fa-comment">chat</i>
       </div>
     </div>
   </section>

@@ -5,7 +5,7 @@ import Footer from './components/Footer.vue';
 import Header from './components/Header.vue';
 
 const isChatOpen = ref(false);
-const initialMessage = "Dobrodošli! Kako možemo da vam pomognemo?";
+const initialMessage = "Welcome! How can I help you?";
 </script>
 
 <template>
@@ -48,7 +48,7 @@ const initialMessage = "Dobrodošli! Kako možemo da vam pomognemo?";
   font-size: 20px;
   cursor: pointer;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 10000; /* Osigurava da dugme bude ispred svega */
+  z-index: 10000; 
 }
 
 .chatbot-window {
